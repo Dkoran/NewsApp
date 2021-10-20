@@ -12,7 +12,7 @@ import com.sample.newsapp.R
 import com.sample.newsapp.models.ArticlesItem
 import kotlinx.android.synthetic.main.item_news_card.view.*
 
-class NewsAdapter :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder> (){
+class NewsAdapter(private var listener: (ArticlesItem) -> Unit) :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder> (){
 
     inner class ArticleViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
 
@@ -35,18 +35,20 @@ class NewsAdapter :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder> (){
        return ArticleViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_news_card,parent,false))
     }
 
+    private  var itemClickListener: ((ArticlesItem)-> Unit)? = null
+
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         val articlesItem = differ.currentList[position]
+
         holder.itemView.apply {
-            Glide.with(this).load(articlesItem.urlToImage).into(image)
+            Glide.with(this).load(articlesItem.urlToImage).error(R.drawable.image_12).into(image)
             date.text = articlesItem.publishedAt
             author.text = articlesItem.source?.name
             title.text = articlesItem.title
-            setOnitemClickListener {
-                itemClickListener?.let { it (articlesItem) }
+
+            setOnClickListener {
+                listener(articlesItem)
             }
-
-
         }
     }
 
@@ -54,10 +56,7 @@ class NewsAdapter :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder> (){
        return differ.currentList.size
     }
 
-
-    private  var itemClickListener: ((ArticlesItem)-> Unit)? = null
-
-   private fun setOnitemClickListener(listener:(ArticlesItem)->Unit){
+    fun setOnItemClickListener(listener:(ArticlesItem)->Unit){
         itemClickListener = listener
-    }
+   }
 }

@@ -5,9 +5,11 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.sample.newsapp.NewsActivity
 import com.sample.newsapp.R
 import com.sample.newsapp.adapters.NewsAdapter
+import com.sample.newsapp.models.ArticlesItem
 import com.sample.newsapp.utils.Resource
 import com.sample.newsapp.viewmodels.NewsViewModel
 import kotlinx.android.synthetic.main.fragment_breaking_news.*
@@ -41,7 +43,7 @@ class BreakingNewsFragment :Fragment(R.layout.fragment_breaking_news) {
         })
     }
     private fun setUpRecyclerView(){
-        newsAdapter = NewsAdapter()
+        newsAdapter = NewsAdapter{data -> clickedArticle (data)}
         recyclerViewBreakingNews.apply {
             adapter = newsAdapter
         }
@@ -55,5 +57,15 @@ class BreakingNewsFragment :Fragment(R.layout.fragment_breaking_news) {
         recyclerViewBreakingNews.visibility = View.GONE
         loader_breakingNews.visibility = View.VISIBLE
 
+    }
+
+    private fun clickedArticle(data: ArticlesItem) {
+        val bundle = Bundle().apply {
+                putSerializable("article", data)
+            }
+            findNavController().navigate(
+                R.id.action_breakingNewsFragment_to_newsArticleFragment,
+                bundle
+            )
     }
 }

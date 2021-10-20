@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
 import com.sample.newsapp.Repository.NewsRepository
+import com.sample.newsapp.models.ArticlesItem
 import com.sample.newsapp.models.NewsResponse
 import com.sample.newsapp.utils.Resource
 import kotlinx.coroutines.launch
@@ -29,6 +30,15 @@ class NewsViewModel(val repository: NewsRepository):  ViewModel() {
         searchNews.postValue(Resource.Loading())
         val searchResponse = repository.searchNews(searchQuery,searchNewsPage)
         searchNews.postValue(handelSearchNewsResponse(searchResponse))
+    }
+    fun saveArticle(article: ArticlesItem) = viewModelScope.launch {
+        repository.insertArticle(article)
+    }
+
+    fun getSavedNews() = repository.getSavedNews()
+
+    fun deleteArticle(article: ArticlesItem) = viewModelScope.launch {
+        repository.deleteArticle(article)
     }
 
     private fun handelResponse(response: Response<NewsResponse>): Resource<NewsResponse>{

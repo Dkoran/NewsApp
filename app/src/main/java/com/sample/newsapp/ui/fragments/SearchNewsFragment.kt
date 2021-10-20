@@ -65,7 +65,7 @@ class SearchNewsFragment : Fragment (R.layout.fragment_search_news) {
 
     }
     private fun setUpRecyclerView(){
-        searchAdapter = NewsAdapter()
+        searchAdapter = NewsAdapter{}
         recyclerView_Search.apply {
             adapter = searchAdapter
         }

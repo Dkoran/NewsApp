@@ -3,7 +3,10 @@ package com.sample.newsapp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.sample.newsapp.Repository.NewsRepository
 import com.sample.newsapp.db.NewsDatabase
@@ -20,6 +23,11 @@ class NewsActivity : AppCompatActivity() {
         val newsRepository = NewsRepository(NewsDatabase(this))
         val viewModelProviderFactory = NewsViewModelProvider(newsRepository)
         viewmodel = ViewModelProvider(this,viewModelProviderFactory).get(NewsViewModel::class.java)
-        bottomNavigationView.setupWithNavController(newNavHostFragment.findNavController())
+
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.breakingNewsFragment, R.id.newsArticleFragment,
+            R.id.favoriteNewsFragment, R.id.searchNewsFragment))
+        val navController by lazy { findNavController(R.id.newNavHostFragment) }
+        NavigationUI.setupWithNavController(appBar, navController, appBarConfiguration)
+        bottomNavigationView.setupWithNavController(navController)
     }
 }
