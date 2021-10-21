@@ -1,6 +1,7 @@
 package com.sample.newsapp
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -29,5 +30,26 @@ class NewsActivity : AppCompatActivity() {
         val navController by lazy { findNavController(R.id.newNavHostFragment) }
         NavigationUI.setupWithNavController(appBar, navController, appBarConfiguration)
         bottomNavigationView.setupWithNavController(navController)
+
+    }
+    fun showBottomNavigation()
+    {
+
+         bottomNavigationView.visibility = View.VISIBLE
+    }
+
+    fun hideBottomNavigation()
+    {
+         bottomNavigationView.visibility = View.GONE
+    }
+
+    fun showToolbar()
+    {
+         appBar.visibility = View.VISIBLE
+    }
+
+    fun hideToolbar()
+    {
+        appBar.visibility = View.GONE
     }
 }
