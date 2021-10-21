@@ -3,11 +3,10 @@ package com.sample.newsapp.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.sample.newsapp.R
 import com.sample.newsapp.models.ArticlesItem
 import kotlinx.android.synthetic.main.item_news_card.view.*
@@ -35,13 +34,15 @@ class NewsAdapter(private var listener: (ArticlesItem) -> Unit) :RecyclerView.Ad
        return ArticleViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_news_card,parent,false))
     }
 
-    private  var itemClickListener: ((ArticlesItem)-> Unit)? = null
-
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         val articlesItem = differ.currentList[position]
 
         holder.itemView.apply {
-            Glide.with(this).load(articlesItem.urlToImage).error(R.drawable.image_12).into(image)
+            image.load(articlesItem.urlToImage) {
+                crossfade(true)
+                placeholder(R.drawable.image_12)
+            }
+
             date.text = articlesItem.publishedAt
             author.text = articlesItem.source?.name
             title.text = articlesItem.title
@@ -55,8 +56,4 @@ class NewsAdapter(private var listener: (ArticlesItem) -> Unit) :RecyclerView.Ad
     override fun getItemCount(): Int {
        return differ.currentList.size
     }
-
-    fun setOnItemClickListener(listener:(ArticlesItem)->Unit){
-        itemClickListener = listener
-   }
 }
